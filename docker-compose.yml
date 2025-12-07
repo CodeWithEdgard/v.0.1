@@ -1,0 +1,41 @@
+# version: "3.9" # Versão do formato do compose
+
+services: # Aqui ficam os containers
+  db: # 1º serviço: banco PostgreSQL
+    image: postgres:15-alpine # Imagem oficial leve do Postgres
+    environment: # Variáveis de ambiente que o Postgres precisa
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: myapp # Nome do banco que será criado automaticamente
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persiste os dados mesmo se derrubar o container
+    ports:
+      - "5432:5432" # (Opcional) permite acessar o banco de fora
+
+  backend: # 2º serviço: sua API FastAPI
+    build: . # Constrói a imagem usando o Dockerfile que está na pasta atual
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload # Sobrescreve o CMD do Dockerfile com --reload (hot reload)
+    volumes:
+      - .:/app # Sincroniza seu código local com o container (mudanças aparecem na hora)
+    ports:
+      - "8000:8000" # Expõe a API na porta 8000 do seu computador
+    environment: # Variáveis que seu código FastAPI vai ler
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/myapp # db = nome do serviço acima
+      - SECRET_KEY=mude_isso_para_uma_chave_forte_123
+    depends_on:
+      - db # Garante que o banco sobe primeiro
+
+  frontend: # 3º serviço: React com Vite
+    image: node:20-alpine # Imagem oficial do Node.js (leve)
+    working_dir: /frontend # Pasta de trabalho dentro do container
+    volumes:
+      - ./frontend:/frontend # Sincroniza a pasta frontend do seu PC
+    ports:
+      - "3000:3000" # Vite roda na porta 3000 por padrão
+    command: sh -c "npm install && npm run dev" # Instala deps e inicia o servidor de desenvolvimento
+    depends_on:
+      - backend # Só sobe depois da API
+
+# Volume nomeado para persistir o banco
+volumes:
+  postgres_data:
