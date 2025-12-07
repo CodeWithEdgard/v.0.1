@@ -1,6 +1,8 @@
+# ===============================
 # Python
+# ===============================
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
 .Python
@@ -21,10 +23,14 @@ coverage.xml
 .pytest_cache/
 .dmypy.json
 
+# ===============================
 # Docker
+# ===============================
 docker-compose.override.yml
 
+# ===============================
 # Node / React
+# ===============================
 node_modules/
 frontend/node_modules/
 dist/
@@ -33,16 +39,35 @@ frontend/.env.local
 frontend/.env.development.local
 frontend/.env.production.local
 
-# IDEs
+# ===============================
+# IDEs / Editors
+# ===============================
 .idea/
 .vscode/
 *.swp
 *.swo
 
-# OS
+# ===============================
+# Operating System
+# ===============================
 .DS_Store
 Thumbs.db
 
-# Banco local (se usar sqlite)
+# ===============================
+# Banco local (SQLite)
+# ===============================
 *.db
 *.sqlite3
+
+# ===============================
+# Logs e arquivos temporários gerais
+# ===============================
+*.log
+*.tmp
+*.bak
+
+# ===============================
+# Migrations automáticas (opcional)
+# ===============================
+# Se usar Alembic ou outro sistema de migrations, pode ignorar pastas de cache temporário
+alembic/versions/__pycache__/

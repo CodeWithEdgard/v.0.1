@@ -1,5 +1,7 @@
-# Não leva nada desnecessário pro container (economiza tempo e tamanho)
-__pycache__
+# ===============================
+# Python
+# ===============================
+__pycache__/
 *.pyc
 *.pyo
 *.pyd
@@ -7,19 +9,63 @@ __pycache__
 env/
 venv/
 .venv/
+
+# ===============================
+# Git
+# ===============================
 .git
 .gitignore
+
+# ===============================
+# Documentação e configs locais
+# ===============================
 README.md
 .dockerignore
-node_modules
-frontend/node_modules
-dist
-frontend/dist
+*.md
+
+# ===============================
+# Node / React
+# ===============================
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# ===============================
+# Logs
+# ===============================
+*.log
+*.tmp
+*.bak
+
+# ===============================
+# Docker
+# ===============================
 .docker
 Dockerfile*
 docker-compose*.yml
 .env
-*.log
+
+# ===============================
+# IDEs / Editors
+# ===============================
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ===============================
+# Sistema operacional
+# ===============================
+.DS_Store
+Thumbs.db
+
+# ===============================
+# Banco local (SQLite) e cache
+# ===============================
+*.db
+*.sqlite3
+*.sqlite

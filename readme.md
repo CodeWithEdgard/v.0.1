@@ -1,47 +1,133 @@
-### 1. Lista de Tarefas Simples
+# Projeto Desafio: Sistema de Usuários
 
-- **Backend (FastAPI)**: Rotas GET /tasks (listar), POST /tasks (criar: título, descrição), PUT /tasks/{id} (marcar feito), DELETE /tasks/{id}. Use SQLAlchemy para modelo Task (id, título, descrição, feito: bool).
-- **Banco**: PostgreSQL com tabela tasks. Conexão via asyncpg ou SQLAlchemy async.
-- **Frontend (React)**: Página com lista de tarefas (useState para array), formulário add (fetch POST), botões check/delete (fetch PUT/DELETE). Use useEffect para fetch inicial.
-- **Docker**: Compose com serviços: db (postgres:alpine, env: POSTGRES_DB, USER, PASSWORD), api (build: ., command: uvicorn main:app --reload, depends_on: db, env: DATABASE_URL=postgresql://user:pass@db/dbname).
-- **Rodar**: docker compose up; API em localhost:8000, React em Vite (npm run dev).
+Este é um projeto backend + frontend desenvolvido como **desafio de criação de usuários**, organizado seguindo **DDD (Domain-Driven Design) + Clean Architecture**, utilizando **FastAPI** no backend e **React/Vite** no frontend.
 
-### 2. Cadastro + Login Básico
+---
 
-- **Backend**: Rotas POST /register (email, senha: hash com Argon2), POST /login (verifica hash, retorna JWT). Use PyJWT para token (secret_key). Modelo User (id, email, hashed_password).
-- **Banco**: Tabela users.
-- **Frontend**: Telas login/register (forms com fetch POST), armazena token no localStorage. Após login, mostra "Bem-vindo, {email}!" (fetch GET /me protegido por header Authorization: Bearer {token}).
-- **Docker**: Adicione ao compose: volumes para persistência db, api com deps para passlib[argon2], pyjwt.
-- **Segurança**: JWT expira em 30min; valida com depends_on_current_user.
+## 📝 Objetivo
 
-### 3. Perfil do Usuário
+- Criar um sistema simples para gerenciar usuários.
+- Seguir boas práticas de arquitetura (DDD + Clean Architecture).
+- Preparar o projeto para futura evolução em microserviços.
+- Integrar backend e frontend usando Docker.
 
-- **Backend**: Extensão do login: GET /me (retorna user info), PUT /me (atualiza email/nome, re-hash senha se mudada). Protegido por JWT.
-- **Banco**: Adicione coluna nome em users.
-- **Frontend**: Após login, página perfil com form edit (pré-preenchido via GET /me, submit PUT). useState para form data.
-- **Docker**: Mesma base, adicione env SECRET_KEY para JWT.
-- **Extra**: Validação email único no register.
+---
 
-### 4. Lista de Compras Compartilhada
+## ⚙️ Ferramentas e Tecnologias
 
-- **Backend**: Após login, rotas para items: GET/POST/PUT/DELETE /items (item: nome, quantidade, comprado: bool). Filtre por user_id.
-- **Banco**: Tabela items (id, user_id FK, nome, qtd, comprado).
-- **Frontend**: Lista itens (fetch GET com token), add form, botões comprar/delete.
-- **Docker**: Mesmo compose; api volumes para código.
-- **Compartilhado**: Opcional: rota share via link público read-only (sem JWT para GET).
+### Backend
 
-### 5. Diário Pessoal
+- Python 3.12
+- FastAPI – Framework para APIs REST
+- SQLAlchemy – ORM para manipulação do banco de dados
+- PostgreSQL – Banco de dados relacional
+- psycopg2-binary – Driver PostgreSQL para Python
+- asyncpg – Driver assíncrono PostgreSQL (opcional para async)
+- Pydantic – Validação e serialização de dados
+- Passlib[argon2] – Hashing de senhas
+- PyJWT – Autenticação via JWT
+- python-dotenv – Carregamento de variáveis de ambiente
+- Uvicorn[standard] – Servidor ASGI para rodar FastAPI
 
-- **Backend**: Rotas POST /entries (data, texto), GET /entries (lista por user), DELETE /entries/{id}. Protegido JWT.
-- **Banco**: Tabela entries (id, user_id, data: date, texto).
-- **Frontend**: Lista entradas (ordenada por data), form nova entrada, delete botão.
-- **Docker**: Adicione date handling com datetime.
-- **Simples**: Sem edit, só create/read/delete.
+### Frontend
 
-### 6. Gerenciador de Contatos
+- React – Biblioteca para interface de usuário
+- Vite – Bundler moderno para React (ou Next.js opcional)
+- Node.js / npm – Gerenciador de pacotes e execução do frontend
 
-- **Backend**: CRUD /contacts (nome, telefone, email). Protegido, filtro por user.
-- **Banco**: Tabela contacts (id, user_id, nome, tel, email).
-- **Frontend**: Tabela ou lista contatos, form add/edit, delete.
-- **Docker**: Base igual, use Pydantic para validação (email validator opcional).
-- **Busca**: Adicione query param para filtro nome.
+### DevOps / Ferramentas Auxiliares
+
+- Docker – Containerização do backend e frontend
+- docker-compose – Orquestração de containers
+- Git – Controle de versão
+- VS Code – IDE recomendada
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+
+meu-projeto/
+├── backend/
+│ ├── src/
+│ │ ├── domain/ ← Regras de negócio puras
+│ │ ├── application/ ← Casos de uso
+│ │ ├── interfaces/ ← Rotas e schemas
+│ │ ├── infrastructure/ ← Banco e serviços externos
+│ │ └── config/ ← Configurações do projeto (.env)
+│ ├── main.py ← Entrypoint FastAPI
+│ ├── Dockerfile ← Docker backend
+│ └── requirements.txt ← Dependências Python
+│
+├── frontend/
+│ ├── src/ ← Código fonte React
+│ ├── public/ ← Assets estáticos
+│ ├── package.json ← Dependências e scripts Node
+│ └── vite.config.ts ← Configuração Vite
+│
+├── docker-compose.yml ← Orquestração containers
+├── .gitignore
+├── .dockerignore
+└── README.md
+
+```
+
+---
+
+## 🚀 Como rodar o projeto
+
+### Pré-requisitos
+
+- Docker e docker-compose instalados
+- Python 3.12 (caso rode backend local sem Docker)
+- Node.js e npm (para frontend)
+
+### Rodando com Docker
+
+```bash
+# No diretório raiz do projeto
+docker-compose up --build
+```
+
+- Backend: `http://localhost:8000`
+- Frontend: `http://localhost:5173` (Vite padrão)
+
+### Rodando apenas backend local (sem Docker)
+
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate  # Linux / Mac
+.venv\Scripts\activate     # Windows
+pip install -r requirements.txt
+uvicorn src.main:app --reload
+```
+
+### Rodando frontend local
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+## 🧩 Próximos passos / Evoluções
+
+- Implementar autenticação JWT completa
+- Criar testes unitários por camada (domain, application, infrastructure)
+- Evoluir para microserviços (ex: separar usuários e tarefas)
+- Integrar frontend com backend via API
+- Implementar Docker para CI/CD
+
+---
+
+## 📄 Referências
+
+- [FastAPI](https://fastapi.tiangolo.com/)
+- [SQLAlchemy](https://www.sqlalchemy.org/)
+- [React](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [DDD + Clean Architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
