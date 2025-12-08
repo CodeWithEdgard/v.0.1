@@ -18,7 +18,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/app
+      DATABASE_URL: postgresql+psycopg2://postgres:postgres@db:5432/app
       SECRET_KEY: supersecreto123
     depends_on:
       - db
