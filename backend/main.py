@@ -1,13 +1,13 @@
 from fastapi import FastAPI
-from app.domains.usuarios.routes import router as usuarios_router
+from app.core.config import config
 
+from app.core.logging import setup_logging
+from app.db.schema import Base, engine
+from app.api.v1.user import router as user_router
 
-app = FastAPI()
+setup_logging()
+Base.metadata.create_all(bind=engine)
 
+app = FastAPI(title=config.app_name)
 
-@app.get("/")
-def init():
-    return {"msg": "voce conseguiu"}
-
-
-app.include_router(usuarios_router, tags=["Usuarios"])
+app.include_router(user_router, prefix="/api/v1")
