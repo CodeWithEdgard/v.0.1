@@ -12,10 +12,3 @@ class UserService:
 
     def list_users(self) -> list[User]:
         return self.db.query(User).all()
-
-    def create_user(self, name: str) -> User:
-            user = User(name=name)
-            self.db.add(user)
-            self.db.commit()
-            self.db.refresh(user)
-            return user

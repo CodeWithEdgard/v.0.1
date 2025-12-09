@@ -1,6 +1,6 @@
 # Projeto Desafio: Sistema de Usuários
 
-Projeto full-stack (backend + frontend) para gerenciamento de usuários, com arquitetura em camadas escalável usando **FastAPI** (backend) e **React + Vite** (frontend).
+Projeto full-stack (backend) para gerenciamento de usuários, com arquitetura em camadas escalável usando **FastAPI**.
 
 ---
 
@@ -25,12 +25,6 @@ Projeto full-stack (backend + frontend) para gerenciamento de usuários, com arq
 - python-dotenv
 - Uvicorn
 
-### Frontend
-
-- React
-- Vite
-- Node.js / npm
-
 ### DevOps
 
 - Docker + docker-compose
@@ -46,7 +40,6 @@ docker-compose up --build
 ```
 
 - Backend: http://localhost:8000
-- Frontend: http://localhost:5173
 
 ### Backend local
 
@@ -57,16 +50,6 @@ source .venv/bin/activate  # ou .venv\Scripts\activate no Windows
 pip install -r requirements.txt
 uvicorn src.main:app --reload
 ```
-
-### Frontend local
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
----
 
 ## Próximos passos
 
@@ -80,7 +63,3 @@ npm run dev
 ## 📄 Referências
 
 - [FastAPI](https://fastapi.tiangolo.com/)
-- [React](https://reactjs.org/)
-- [Vite](https://vitejs.dev/)
-
-Pronto. Simples, verdadeiro e profissional.
